@@ -5,17 +5,19 @@ import Product from '../Product/Product';
 import Cart from '../Cart/Cart';
 import {addToDatabaseCart, getDatabaseCart} from '../../utilities/databaseManager'
 import { Link } from 'react-router-dom';
+import {CircularProgress} from '@material-ui/core'
 
 
 const Shop = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
+    document.title = 'Shop More'
 
 
     useEffect(() => {
-        fetch("http://localhost:5000/products")
-        .then(res => res.json())
-        .then(data => setProducts(data))
+        fetch("https://blooming-refuge-80139.herokuapp.com/products")
+          .then((res) => res.json())
+          .then((data) => setProducts(data));
     }, [])
 
 
@@ -23,7 +25,7 @@ const Shop = () => {
         const savedCart = getDatabaseCart();
         const productKeys = Object.keys(savedCart);
 
-        fetch("http://localhost:5000/productsByKeys", {
+        fetch("https://blooming-refuge-80139.herokuapp.com/productKeys", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -60,6 +62,10 @@ const Shop = () => {
         <div className="twin-container">
             <div className="product-container">
                 
+                {
+                    products.length === 0 && <CircularProgress color="secondary" />
+                }
+
                 {
                     products.map(pd => <Product
                         key={pd.key}
